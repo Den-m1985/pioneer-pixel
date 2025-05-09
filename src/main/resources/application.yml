@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: pioneer-pixel
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pioneer
+    username: postgres_pioneer
+    password: 123456
+    driverClassName: org.postgresql.Driver
+    platform: postgres
+    initialization-mode: always
+    continue-on-error: true
+  jpa:
+    show-sql: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+
+server:
+  port: 8080
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud: INFO
+    org.springframework.web: INFO
+
+jwt:
+  secret:
+    access: MEECAQAwEwYHKoZIzj0CAQYIKoZIzj0DAQcEJzAlAgEBBCDM1CGdbcKpFyfXKxJgqhzQoruKfYrGMUfWIxm/cC64mA==
+  lifetime:
+    access: 30000

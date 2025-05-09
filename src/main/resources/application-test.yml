@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: pioneer-pixel
+
+  datasource:
+    url: jdbc:h2:mem:pioneer
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud: INFO
+    org.springframework.web: INFO
+
+jwt:
+  secret:
+    access: MEECAQAwEwYHKoZIzj0CAQYIKoZIzj0DAQcEJzAlAgEBBCDM1CGdbcKpFyfXKxJgqhzQoruKfYrGMUfWIxm/cC64mA==
+  lifetime:
+    access: 30000

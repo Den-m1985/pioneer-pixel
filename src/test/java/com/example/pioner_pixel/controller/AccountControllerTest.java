@@ -4,6 +4,7 @@ import com.example.pioner_pixel.dto.AuthResponse;
 import com.example.pioner_pixel.dto.CreateUserDto;
 import com.example.pioner_pixel.model.Account;
 import com.example.pioner_pixel.repository.AccountRepository;
+import com.example.pioner_pixel.repository.UserRepository;
 import com.example.pioner_pixel.service.UserRegisterService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ class AccountControllerTest {
     private AccountRepository accountRepository;
     @Autowired
     private UserRegisterService registerService;
+    @Autowired
+    private UserRepository userRepository;
     private Account account;
 
     @Test
@@ -41,11 +44,12 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"amount\": 50.00}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accountId").value(1))
+                .andExpect(jsonPath("$.accountId").value(account.getId()))
                 .andExpect(jsonPath("$.newBalance").value(150.00));
     }
 
     private void initData() {
+        userRepository.deleteAll();
         CreateUserDto createUserDto = new CreateUserDto(
                 "Name",
                 "2025-05-09",

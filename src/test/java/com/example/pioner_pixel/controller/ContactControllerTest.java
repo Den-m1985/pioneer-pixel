@@ -11,11 +11,14 @@ import com.example.pioner_pixel.service.UserRegisterService;
 import com.example.pioner_pixel.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,6 +41,8 @@ class ContactControllerTest {
     ContactService contactService;
     @Autowired
     UserService userService;
+    @Autowired
+    private CacheManager cacheManager;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private String token;
@@ -49,6 +54,7 @@ class ContactControllerTest {
     @BeforeEach
     void setup() {
         userRepository.deleteAll();
+        clearCache();
         CreateUserDto dto = new CreateUserDto("Name", "2025-05-09", email, password, phone);
         AuthResponse authResponse = registerService.registerUser(dto);
         this.token = authResponse.accessToken();
@@ -88,5 +94,14 @@ class ContactControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(contactRequestDto)))
                 .andExpect(status().isOk());
+    }
+
+    void clearCache() {
+        cacheManager.getCacheNames().forEach(name -> {
+            var cache = cacheManager.getCache(name);
+            if (cache != null) {
+                cache.clear();
+            }
+        });
     }
 }

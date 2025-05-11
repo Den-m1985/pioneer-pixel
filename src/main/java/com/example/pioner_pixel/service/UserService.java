@@ -7,6 +7,8 @@ import com.example.pioner_pixel.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,6 +20,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "users")
 public class UserService {
     private final UserRepository userRepository;
     private final EmailService emailService;
@@ -28,6 +31,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User with ID " + userId + " not found"));
     }
 
+    @Cacheable(key = "#email", unless = "#result == null")
     public User findUserByEmail(String email) {
         Long userId = findUserIdByEmail(email);
         return userRepository.findUserWithDetailsById(userId)

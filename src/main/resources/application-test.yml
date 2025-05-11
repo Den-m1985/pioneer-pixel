@@ -1,6 +1,8 @@
 spring:
   application:
     name: pioneer-pixel
+  cache:
+    type: simple
 
   datasource:
     url: jdbc:h2:mem:pioneer

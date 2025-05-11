@@ -1,6 +1,13 @@
 spring:
   application:
     name: pioneer-pixel
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000 # 5 минут
+  redis:
+    host: redis
+    port: 6379
 
   datasource:
     url: jdbc:postgresql://localhost:5432/pioneer

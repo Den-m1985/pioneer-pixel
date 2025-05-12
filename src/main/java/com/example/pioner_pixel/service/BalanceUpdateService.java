@@ -30,10 +30,9 @@ public class BalanceUpdateService {
             BigDecimal maxAllowed = account.getInitialDeposit().multiply(new BigDecimal("2.07")); // 207%
             BigDecimal newBalance = currentBalance.multiply(new BigDecimal("1.10"));
             if (newBalance.compareTo(maxAllowed) > 0) {
-                account.setBalance(maxAllowed);
-            } else {
-                account.setBalance(newBalance);
+                newBalance = maxAllowed;
             }
+            account.setBalance(newBalance);
             log.info("Account {} balance increased from {} to {}", account.getId(), currentBalance, newBalance);
         }
         accountRepository.saveAll(accounts);
@@ -53,7 +52,8 @@ public class BalanceUpdateService {
         }
         BigDecimal newBalance = previousBalance.add(amount);
         account.setBalance(newBalance);
-        log.info("Deposit completed. New balance: {}", newBalance);
+        log.info("Loaded account {} with balance {}", account.getId(), account.getBalance());
+
         accountRepository.save(account);
 
         return new AccountDepositResponse(
